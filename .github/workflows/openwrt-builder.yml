@@ -98,7 +98,21 @@ jobs:
         cd openwrt
         [ -e $GITHUB_WORKSPACE/$CONFIG_FILE ] && mv $GITHUB_WORKSPACE/$CONFIG_FILE .config
         make defconfig
+        
+   # ================= 核心逻辑 A：手动触发 SSH (用于 menuconfig) =================
+      - name: . SSH 连接至 Actions (云端 menuconfig)
+        # 【防循环SSH关键2】：仅当手动触发且勾选了 ssh=true 时执行
+        if: github.event.inputs.ssh == 'true'
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: false
+          # 提示：连入后请执行 cd openwrt && make menuconfig
+          # 配置完成后，用 base64 .config 或 cat .config 复制内容，然后 exit 退出
 
+      # 如果上面执行了 SSH 且你 exit 了，流程会继续往下走。
+      # 如果你只是想配置 menuconfig 而不编译，请在网页端手动 Cancel workflow。
+      # ==========================================================================
+    
     # --------------------------------------------------------
     # 步骤 7：下载依赖包
     # --------------------------------------------------------
