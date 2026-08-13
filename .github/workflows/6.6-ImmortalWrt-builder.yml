@@ -19,8 +19,8 @@ on:
 # 2. 全局环境变量 (Environment Variables)
 # ============================================================
 env:
-  REPO_URL: https://github.com/fat4-alt/immortalwrt-mt798x-5.4
-  REPO_BRANCH: 2410
+  REPO_URL: https://github.com/fat4-alt/immortalwrt-mt798x-6.6
+  REPO_BRANCH: openwrt-24.10-6.6
   CONFIG_FILE: .config
   DIY_SH: diy.sh
   FREE_SPACE: true
@@ -92,9 +92,9 @@ jobs:
         echo 'src-git qmodem https://github.com/FUjr/QModem.git;main' >> feeds.conf.default
         ./scripts/feeds update -a
         ./scripts/feeds install -a
-    # ./scripts/feeds update qmodem
-    # ./scripts/feeds install -a -p qmodem
-    # ./scripts/feeds install -a -f -p qmodem
+        ./scripts/feeds update qmodem
+        ./scripts/feeds install -a -p qmodem
+        ./scripts/feeds install -a -f -p qmodem
         
 
     # --------------------------------------------------------
@@ -146,6 +146,6 @@ jobs:
       uses: actions/upload-artifact@main
       if: steps.organize.outputs.status == 'success'
       with:
-        name: ImmortalWrt-5.4_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
+        name: ImmortalWrt-6.6_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
         path: ${{ env.FIRMWARE }}
 
